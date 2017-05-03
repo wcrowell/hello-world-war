@@ -9,10 +9,15 @@ node('testslave') {
     // prepare docker build context
     sh "cp target/hello-world.war ./tmp-docker-build-context"
 
-    docker.withServer('tcp://192.168.40.188:2376', 'docker-host-certificate-authentication') {
-        def image = docker.image('williamcrowell/helloworld')
-        image.run('-p 5000:8080')
-        image.stop()
+    docker.withTool('default') {
+        withDockerServer([credentialsId: "AWS-Jenkins-Build-Slave", uri: "tcp://192.168.40.188:2376"]) {
+	   sh "printenv" 
+	   sh "docker images" 
+	   //image = docker.build("williamcrowell/helloworld") 
+	   //image.push("tmp-fromjenkins") 
+           //image.run('-p 5000:8080')
+	   //image.stop()
+	}
     }
 
     // Build and push image with Jenkins' docker-plugin
