@@ -16,9 +16,11 @@ node('testslave') {
 	   //The next command will build the Dockerfile in the current directory which is the workspace.
 	   image = docker.build("helloworld") 
 	   //Run the image and map port 5000 to the containers 8080 port
-           image.run('-p 5000:8080')
+           image.run("-p ${port:5000}:8080")
 	   //Stop is commented out.  This could be parameterized.
-	   //image.stop()
+	   if (${stop:false}) {
+	       image.stop()
+	   }
 	}
     }
   }
