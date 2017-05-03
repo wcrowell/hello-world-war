@@ -15,7 +15,7 @@ node('testslave') {
 	   sh "docker images" 
 	   image = docker.build("helloworld") 
 	   //image.push("tmp-fromjenkins") 
-           //image.run('-p 5000:8080')
+           image.run('-p 5000:8080')
 	   //image.stop()
 	}
     }
