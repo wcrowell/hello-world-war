@@ -1,3 +1,5 @@
+properties([parameters([string(defaultValue: '5000', description: 'This is the port mapping between the host and container.', name: 'hostPort'), booleanParam(defaultValue: false, description: '', name: 'stopContainer')])])
+
 node('testslave') {
   checkout scm
   env.PATH = "${tool 'Maven3'}/bin:${env.PATH}"
@@ -8,20 +10,20 @@ node('testslave') {
   stage ('Docker Build') {
     //Make sure Jenkins master has a Docker global tool defined named 'default'
     docker.withTool('default') {
-        withDockerServer([credentialsId: "docker-host-certificate-authentication", uri: "tcp://192.168.40.188:2376"]) {
-	   //Print out the current environment variables
-	   sh "printenv" 
-	   //Print out which images are available
-	   sh "docker images" 
-	   //The next command will build the Dockerfile in the current directory which is the workspace.
-	   image = docker.build("helloworld") 
-	   //Run the image and map port 5000 to the containers 8080 port
-           image.run("-p ${env.port:5000}:8080")
-	   //Stop is commented out.  This could be parameterized.
-	   if (${env.stop:false}) {
-	       image.stop()
-	   }
-	}
+      withDockerServer([credentialsId: "docker-host-certificate-authentication", uri: "tcp://192.168.40.188:2376"]) {
+        //Print out the current environment variables
+        sh "printenv" 
+        //Print out which images are available
+        sh "docker images" 
+        //The next command will build the Dockerfile in the current directory which is the workspace.
+        image = docker.build("helloworld") 
+        //Run the image and map port in parameter hostPort to the containers 8080 port
+        image.run("-p ${params.hostPort}:8080")
+        //If the stopContainer parameter is defined as true, then stop the container immediately after deployment
+        if (${params.stopContainer}) {
+          image.stop()
+        }
+      }
     }
   }
 }
