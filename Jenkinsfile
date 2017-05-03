@@ -10,7 +10,7 @@ node('testslave') {
     sh "cp target/hello-world.war ./tmp-docker-build-context"
 
     docker.withTool('default') {
-        withDockerServer([credentialsId: "AWS-Jenkins-Build-Slave", uri: "tcp://192.168.40.188:2376"]) {
+        withDockerServer([credentialsId: "docker-host-certificate-authentication", uri: "https://192.168.40.188:2376"]) {
 	   sh "printenv" 
 	   sh "docker images" 
 	   //image = docker.build("williamcrowell/helloworld") 
