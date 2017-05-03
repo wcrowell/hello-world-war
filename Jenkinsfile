@@ -1,5 +1,3 @@
-properties([parameters([string(defaultValue: '5000', description: 'This is the port mapping between the host and container.', name: 'hostPort'), booleanParam(defaultValue: false, description: '', name: 'stopContainer')])])
-
 node('testslave') {
   checkout scm
   env.PATH = "${tool 'Maven3'}/bin:${env.PATH}"
@@ -23,7 +21,7 @@ node('testslave') {
         if (env.stopContainer) {
           echo "Stopping the container..."
 	  //Could not get the stop to work properly
-          //image.stop()
+          image.stop()
         }
       }
     }
