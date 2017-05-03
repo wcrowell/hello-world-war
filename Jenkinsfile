@@ -12,7 +12,7 @@ node('testslave') {
     // Build and push image with Jenkins' docker-plugin
     withDockerServer([uri: "tcp://192.168.40.188:2376"]) {
         // we give the image the same version as the .war package
-        def image = docker.build("williamcrowell/helloworld:${branchVersion}", "--build-arg PACKAGE_VERSION=${branchVersion} ./tmp-docker-build-context")
+        def image = docker.build("williamcrowell/helloworld:1.0", "--build-arg PACKAGE_VERSION=${branchVersion} ./tmp-docker-build-context")
         image.run()
     }
   }
