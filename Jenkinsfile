@@ -18,11 +18,11 @@ node('testslave') {
         //The next command will build the Dockerfile in the current directory which is the workspace.
         image = docker.build("helloworld") 
         //Run the image and map port in parameter hostPort to the containers 8080 port
-        image.run("-p ${params.hostPort}:8080")
+        image.run("-p ${env.hostPort}:8080")
         //If the stopContainer parameter is defined as true, then stop the container immediately after deployment
-        if ("${params.stopContainer}") {
-          image.stop()
-        }
+        //if ("${env.stopContainer}") {
+          //image.stop()
+        //}
       }
     }
   }
