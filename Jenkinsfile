@@ -13,7 +13,7 @@ node('testslave') {
         withDockerServer([credentialsId: "docker-host-certificate-authentication", uri: "tcp://192.168.40.188:2376"]) {
 	   sh "printenv" 
 	   sh "docker images" 
-	   image = docker.bui22ld("./Dockerfile") 
+	   image = docker.build("helloworld") 
 	   //image.push("tmp-fromjenkins") 
            //image.run('-p 5000:8080')
 	   //image.stop()
