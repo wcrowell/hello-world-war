@@ -6,25 +6,20 @@ node('testslave') {
   }
 
   stage ('Docker Build') {
-    // prepare docker build context
-    sh "cp target/hello-world.war ./tmp-docker-build-context"
-
+    //Make sure Jenkins master has a Docker global tool defined named 'default'
     docker.withTool('default') {
         withDockerServer([credentialsId: "docker-host-certificate-authentication", uri: "tcp://192.168.40.188:2376"]) {
+	   //Print out the current environment variables
 	   sh "printenv" 
+	   //Print out which images are available
 	   sh "docker images" 
+	   //The next command will build the Dockerfile in the current directory which is the workspace.
 	   image = docker.build("helloworld") 
-	   //image.push("tmp-fromjenkins") 
+	   //Run the image and map port 5000 to the containers 8080 port
            image.run('-p 5000:8080')
+	   //Stop is commented out.  This could be parameterized.
 	   //image.stop()
 	}
     }
-
-    // Build and push image with Jenkins' docker-plugin
-    //docker.withServer([uri: "tcp://192.168.40.188:2376"],) {
-        // we give the image the same version as the .war package
-        //def image = docker.build("williamcrowell/helloworld:1.0", "--build-arg PACKAGE_VERSION=1.0 ./tmp-docker-build-context")
-        //image.run()
-    //}
   }
 }
