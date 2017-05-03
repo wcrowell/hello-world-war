@@ -20,9 +20,9 @@ node('testslave') {
         //Run the image and map port in parameter hostPort to the containers 8080 port
         image.run("-p ${env.hostPort}:8080")
         //If the stopContainer parameter is defined as true, then stop the container immediately after deployment
-        //if ("${env.stopContainer}") {
-          //image.stop()
-        //}
+        if (env.stopContainer) {
+          image.stop()
+        }
       }
     }
   }
